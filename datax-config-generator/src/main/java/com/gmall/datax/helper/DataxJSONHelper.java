@@ -2,13 +2,11 @@ package com.gmall.datax.helper;
 
 import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
-import com.gmall.datax.Main;
 import com.gmall.datax.bean.Table;
 import com.gmall.datax.configuration.Configuration;
 import lombok.Getter;
 
 import java.io.File;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 
 @Getter
@@ -20,24 +18,20 @@ public class DataxJSONHelper {
     private final JSONObject hdfs2MySQLConfig;
     
     {
-        try {
-            mySQL2HdfsConfig = JSONUtil.readJSONObject(
-                    // Hadoop 单点集群
-                    new File(Main.class.getClassLoader().getResource("mysql2hdfs_template_single.json").toURI()),
-                    // Hadoop HA 集群
-                    // new File(Main.class.getClassLoader().getResource("mysql2hdfs_template_ha.json").toURI()),
-                    Charset.defaultCharset()
-            );
-            hdfs2MySQLConfig = JSONUtil.readJSONObject(
-                    // Hadoop 单点集群
-                    new File(Main.class.getClassLoader().getResource("hdfs2mysql_template_single.json").toURI()),
-                    // Hadoop HA 集群
-                    // new File(Main.class.getClassLoader().getResource("hdfs2mysql_template_ha.json").toURI()),
-                    Charset.defaultCharset()
-            );
-        } catch (URISyntaxException e) {
-            throw new RuntimeException(e);
-        }
+        mySQL2HdfsConfig = JSONUtil.readJSONObject(
+                // Hadoop 单点集群
+                new File("mysql2hdfs_template_single.json"),
+                // Hadoop HA 集群
+                // new File("mysql2hdfs_template_ha.json"),
+                Charset.defaultCharset()
+        );
+        hdfs2MySQLConfig = JSONUtil.readJSONObject(
+                // Hadoop 单点集群
+                new File("hdfs2mysql_template_single.json"),
+                // Hadoop HA 集群
+                // new File("hdfs2mysql_template_ha.json"),
+                Charset.defaultCharset()
+        );
     }
     
     public DataxJSONHelper() {
@@ -60,8 +54,8 @@ public class DataxJSONHelper {
         mySqlWriterParameter.set("password", Configuration.MYSQL_PASSWORD);
         
         // 设置MySQL JDBC URL
-        mysqlReaderParameter.putByPath("connection[0].jdbcUrl[0]", Configuration.MYSQL_URL_IMPORT);
-        mySqlWriterParameter.putByPath("connection[0].jdbcUrl", Configuration.MYSQL_URL_EXPORT);
+        mysqlReaderParameter.putByPath("connection[0].jdbcUrl[0]", Configuration.MYSQL_URL_MYSQL2HDFS);
+        mySqlWriterParameter.putByPath("connection[0].jdbcUrl", Configuration.MYSQL_URL_HDFS2MYSQL);
         
         // 写回Reader和Writer配置
         mySQL2HdfsConfig.putByPath("job.content[0].reader.parameter", mysqlReaderParameter);

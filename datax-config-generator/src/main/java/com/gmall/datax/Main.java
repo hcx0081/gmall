@@ -17,7 +17,7 @@ public class Main {
         // 生成MySQL -> HDFS的配置文件
         if (Configuration.OUT_DIR_MYSQL2HDFS != null && !"".equals(Configuration.OUT_DIR_MYSQL2HDFS)) {
             MySQLHelper mySQLHelper = new MySQLHelper(
-                    Configuration.MYSQL_URL_IMPORT,
+                    Configuration.MYSQL_URL_MYSQL2HDFS,
                     Configuration.MYSQL_DATABASE_MYSQL2HDFS,
                     Configuration.MYSQL_TABLES_MYSQL2HDFS
             );
@@ -68,7 +68,7 @@ public class Main {
         // 生成HDFS -> MySQL的配置文件
         if (Configuration.OUT_DIR_HDFS2MYSQL != null && !"".equals(Configuration.OUT_DIR_HDFS2MYSQL)) {
             MySQLHelper mysqlHelper = new MySQLHelper(
-                    Configuration.MYSQL_URL_EXPORT,
+                    Configuration.MYSQL_URL_HDFS2MYSQL,
                     Configuration.MYSQL_DATABASE_HDFS2MYSQL,
                     Configuration.MYSQL_TABLES_HDFS2MYSQL
             );
