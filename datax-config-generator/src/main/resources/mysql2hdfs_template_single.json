@@ -1,0 +1,42 @@
+{
+    "job": {
+        "content": [
+            {
+                "reader": {
+                    "name": "mysqlreader",
+                    "parameter": {
+                        "username": "",
+                        "password": "",
+                        "column": [],
+                        "connection": [
+                            {
+                                "jdbcUrl": [],
+                                "table": []
+                            }
+                        ],
+                        "splitPk": ""
+                    }
+                },
+                "writer": {
+                    "name": "hdfswriter",
+                    "parameter": {
+                        "defaultFS": "hdfs://192.168.100.100:8020",
+                        "fileType": "text",
+                        "path": "${targetDir}",
+                        "fileName": "fileName",
+                        "column": [],
+                        "nullFormat": "",
+                        "writeMode": "truncate",
+                        "fieldDelimiter": "\t",
+                        "compress": "gzip"
+                    }
+                }
+            }
+        ],
+        "setting": {
+            "speed": {
+                "channel": 1
+            }
+        }
+    }
+}
