@@ -6,7 +6,7 @@
                     "name": "hdfsreader",
                     "parameter": {
                         "defaultFS": "",
-                        "path": "${exportDir}",
+                        "path": "${targetDir}",
                         "dfs.nameservices": "mycluster",
                         "dfs.ha.namenodes.mycluster": "namenode1,namenode2",
                         "dfs.namenode.rpc-address.aliDfs.namenode1": "hdfs://com.tstzyls-hadoop101:8020",
