@@ -6,11 +6,10 @@ import org.apache.flume.Event;
 import org.apache.flume.interceptor.Interceptor;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class TimestampInterceptor implements Interceptor {
+public class TimestampAndTableNameInterceptor implements Interceptor {
     @Override
     public void initialize() {
     
@@ -19,32 +18,27 @@ public class TimestampInterceptor implements Interceptor {
     // 处理单个Event
     @Override
     public Event intercept(Event event) {
-        // 获取Header和Body
         Map<String, String> headers = event.getHeaders();
-        System.out.println(headers);
         String bodyData = new String(event.getBody(), StandardCharsets.UTF_8);
-        try {
-            // 将data转换成json对象
-            JSONObject jsonObject = JSONObject.parseObject(bodyData);
-            String ts = jsonObject.getString("ts");
-            headers.put("timestamp", ts);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        
+        JSONObject jsonObject = JSONObject.parseObject(bodyData);
+        
+        Long ts = jsonObject.getLong("ts");
+        // Maxwell输出的数据中的ts字段时间戳单位为秒，Flume HDFSSink要求单位为毫秒
+        String timeMills = String.valueOf(ts * 1000);
+        
+        String tableName = jsonObject.getString("table");
+        
+        headers.put("timestamp", timeMills);
+        headers.put("tableName", tableName);
         return event;
     }
     
     // 处理多个Event
     @Override
     public List<Event> intercept(List<Event> events) {
-        Iterator<Event> eventIterator = events.iterator();
-        while (eventIterator.hasNext()) {
-            Event nextEvent = eventIterator.next();
-            Event eventResult = intercept(nextEvent);
-            if (eventResult == null) {
-                eventIterator.remove();
-            }
+        for (Event event : events) {
+            intercept(event);
         }
         return events;
     }
