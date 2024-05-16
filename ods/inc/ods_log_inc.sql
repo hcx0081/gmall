@@ -1,4 +1,5 @@
 -- 建表
+drop table if exists ods_log_inc;
 create external table ods_log_inc
 (
     `common`   struct<ar :string, ba :string, ch :string, is_new :string, md :string, mid :string, os :string, sid
@@ -17,7 +18,6 @@ create external table ods_log_inc
     row format serde 'org.apache.hadoop.hive.serde2.JsonSerDe'
     location '/gmall/warehouse/ods/ods_log_inc/'
     tblproperties ('compression.codec' = 'org.apache.hadoop.io.compress.GzipCodec');
-drop table if exists ods_log_inc;
 
 
 -- 装载数据
