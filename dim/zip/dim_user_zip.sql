@@ -20,7 +20,7 @@ create external table dim_user_zip
     tblproperties ('orc.compress' = 'snappy');
 
 
--- 装载数据（首日）
+-- 装载数据（首日）（注意此处的分区策略）
 insert overwrite table dim_user_zip partition (dt = '9999-12-31')
 select data.`id`,
        data.`name`,
