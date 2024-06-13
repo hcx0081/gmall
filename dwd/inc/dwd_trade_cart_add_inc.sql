@@ -2,14 +2,14 @@
 drop table if exists dwd_trade_cart_add_inc;
 create external table dwd_trade_cart_add_inc
 (
-    `id`          string comment '编号',
-    `user_id`     string comment '用户id',
-    `sku_id`      string comment 'sku_id',
-    `date_id`     string comment '日期id',
-    `create_time` string comment '加购时间',
-    `sku_num`     bigint comment '加购物车件数'
+    id          string comment '编号',
+    user_id     string comment '用户id',
+    sku_id      string comment 'sku_id',
+    date_id     string comment '日期id',
+    create_time string comment '加购时间',
+    sku_num     bigint comment '加购物车件数'
 ) comment '交易域加购事务事实表'
-    partitioned by (`dt` string)
+    partitioned by (dt string)
     stored as orc
     location '/gmall/warehouse/dwd/dwd_trade_cart_add_inc/'
     tblproperties ('orc.compress' = 'snappy');
