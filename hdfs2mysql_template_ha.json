@@ -1,47 +1,47 @@
 {
-    "job": {
-        "content": [
-            {
-                "reader": {
-                    "name": "hdfsreader",
-                    "parameter": {
-                        "defaultFS": "",
-                        "path": "${targetDir}",
-                        "dfs.nameservices": "mycluster",
-                        "dfs.ha.namenodes.mycluster": "namenode1,namenode2",
-                        "dfs.namenode.rpc-address.aliDfs.namenode1": "hdfs://com.tstzyls-hadoop101:8020",
-                        "dfs.namenode.rpc-address.aliDfs.namenode2": "hdfs://com.tstzyls-hadoop102:8020",
-                        "dfs.client.failover.proxy.provider.mycluster": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
-                        "column": [
-                            "*"
-                        ],
-                        "fileType": "text",
-                        "encoding": "UTF-8",
-                        "fieldDelimiter": "\t",
-                        "nullFormat": "\\N"
-                    }
-                },
-                "writer": {
-                    "name": "mysqlwriter",
-                    "parameter": {
-                        "writeMode": "replace",
-                        "username": "",
-                        "password": "",
-                        "connection": [
-                            {
-                                "jdbcUrl": [],
-                                "table": []
-                            }
-                        ],
-                        "column": []
-                    }
-                }
-            }
-        ],
-        "setting": {
-            "speed": {
-                "channel": 1
-            }
+  "job": {
+    "content": [
+      {
+        "reader": {
+          "name": "hdfsreader",
+          "parameter": {
+            "defaultFS": "",
+            "path": "${dir}",
+            "dfs.nameservices": "mycluster",
+            "dfs.ha.namenodes.mycluster": "namenode1,namenode2",
+            "dfs.namenode.rpc-address.aliDfs.namenode1": "hdfs://com.tstzyls-hadoop101:8020",
+            "dfs.namenode.rpc-address.aliDfs.namenode2": "hdfs://com.tstzyls-hadoop102:8020",
+            "dfs.client.failover.proxy.provider.mycluster": "org.apache.hadoop.hdfs.server.namenode.ha.ConfiguredFailoverProxyProvider",
+            "column": [
+              "*"
+            ],
+            "fileType": "text",
+            "encoding": "UTF-8",
+            "fieldDelimiter": "\t",
+            "nullFormat": "\\N"
+          }
+        },
+        "writer": {
+          "name": "mysqlwriter",
+          "parameter": {
+            "writeMode": "replace",
+            "username": "",
+            "password": "",
+            "connection": [
+              {
+                "jdbcUrl": [],
+                "table": []
+              }
+            ],
+            "column": []
+          }
         }
+      }
+    ],
+    "setting": {
+      "speed": {
+        "channel": 1
+      }
     }
+  }
 }

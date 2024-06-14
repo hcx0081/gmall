@@ -1,43 +1,43 @@
 {
-    "job": {
-        "content": [
-            {
-                "reader": {
-                    "name": "hdfsreader",
-                    "parameter": {
-                        "defaultFS": "",
-                        "path": "${targetDir}",
-                        "column": [
-                            "*"
-                        ],
-                        "fileType": "text",
-                        "encoding": "UTF-8",
-                        "fieldDelimiter": "\t",
-                        "compress": "gzip",
-                        "nullFormat": "\\N"
-                    }
-                },
-                "writer": {
-                    "name": "mysqlwriter",
-                    "parameter": {
-                        "writeMode": "replace",
-                        "username": "",
-                        "password": "",
-                        "connection": [
-                            {
-                                "jdbcUrl": "",
-                                "table": []
-                            }
-                        ],
-                        "column": []
-                    }
-                }
-            }
-        ],
-        "setting": {
-            "speed": {
-                "channel": 1
-            }
+  "job": {
+    "content": [
+      {
+        "reader": {
+          "name": "hdfsreader",
+          "parameter": {
+            "defaultFS": "",
+            "path": "${dir}",
+            "column": [
+              "*"
+            ],
+            "fileType": "text",
+            "encoding": "UTF-8",
+            "fieldDelimiter": "\t",
+            "compress": "gzip",
+            "nullFormat": "\\N"
+          }
+        },
+        "writer": {
+          "name": "mysqlwriter",
+          "parameter": {
+            "writeMode": "replace",
+            "username": "",
+            "password": "",
+            "connection": [
+              {
+                "jdbcUrl": "",
+                "table": []
+              }
+            ],
+            "column": []
+          }
         }
+      }
+    ],
+    "setting": {
+      "speed": {
+        "channel": 1
+      }
     }
+  }
 }
