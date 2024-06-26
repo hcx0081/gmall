@@ -1,4 +1,4 @@
-package com.realtime.dwd;
+package com.gmall.realtime;
 
 public class Main {
     public static void main(String[] args) {
