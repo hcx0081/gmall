@@ -2,7 +2,9 @@ package com.gmall.realtime.dim;
 
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONReader;
 import com.gmall.realtime.common.base.BaseApp;
+import com.gmall.realtime.common.bean.TableProcessDim;
 import com.gmall.realtime.common.constant.Constants;
 import com.gmall.realtime.common.util.FlinkSourceUtils;
 import com.gmall.realtime.common.util.HBaseUtils;
@@ -15,7 +17,6 @@ import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.Collector;
-import org.apache.hadoop.hbase.client.Connection;
 
 public class DimApp extends BaseApp {
     public static void main(String[] args) throws Exception {
@@ -27,34 +28,54 @@ public class DimApp extends BaseApp {
         /* 1. ETL数据 */
         SingleOutputStreamOperator<JSONObject> jsonObjStream = etlData(source);
         
-        
         /* 2. 使用Flink-CDC监控配置表数据 */
-        DataStreamSource<String> mySqlSource = env.fromSource(
-                        FlinkSourceUtils.getMySqlSource(Constants.CONFIG_DATABASE, Constants.CONFIG_TABLE),
-                        WatermarkStrategy.noWatermarks(),
-                        "cdc-source"
-                )
-                // 注意需要设置并行度为1
-                .setParallelism(1);
-        mySqlSource.flatMap(new RichFlatMapFunction<String, JSONObject>() {
-            Connection connection;
+        DataStreamSource<String> mySqlSource =
+                env.fromSource(
+                           FlinkSourceUtils.getMySqlSource(Constants.CONFIG_DATABASE, Constants.CONFIG_TABLE),
+                           WatermarkStrategy.noWatermarks(),
+                           "cdc-source"
+                   )
+                   // 注意需要设置并行度为1
+                   .setParallelism(1);
+        SingleOutputStreamOperator<TableProcessDim> createHBaseTableStream = mySqlSource.flatMap(new RichFlatMapFunction<String, TableProcessDim>() {
+            /* 注意：需要先在HBase中创建gmall命名空间：create_namespace 'gmall'！ */
             
             @Override
             public void open(Configuration parameters) throws Exception {
-                connection = HBaseUtils.getConnection();
-                
+                HBaseUtils.getConnection();
             }
             
             @Override
-            public void flatMap(String value, Collector<JSONObject> out) throws Exception {
+            public void flatMap(String value, Collector<TableProcessDim> out) throws Exception {
                 boolean isJsonObj = JSON.isValidObject(value);
                 if (isJsonObj) {
                     JSONObject jsonObject = JSON.parseObject(value);
-                    
-                    
-                    HBaseUtils.createNamespace(Constants.HBASE_NAMESPACE);
+                    String op = jsonObject.getString("op");
+                    TableProcessDim tableProcessDim = new TableProcessDim();
+                    if ("d".equals(op)) {
+                        tableProcessDim = jsonObject.getObject("before", TableProcessDim.class, JSONReader.Feature.SupportSmartMatch);
+                        deleteTable(tableProcessDim);
+                    }
+                    if ("c".equals(op) || "r".equals(op)) {
+                        tableProcessDim = jsonObject.getObject("after", TableProcessDim.class, JSONReader.Feature.SupportSmartMatch);
+                        createTable(tableProcessDim);
+                    }
+                    if ("u".equals(op)) {
+                        tableProcessDim = jsonObject.getObject("after", TableProcessDim.class, JSONReader.Feature.SupportSmartMatch);
+                        deleteTable(tableProcessDim);
+                        createTable(tableProcessDim);
+                    }
+                    tableProcessDim.setOp(op);
+                    out.collect(tableProcessDim);
                 }
-                
+            }
+            
+            private void createTable(TableProcessDim tableProcessDim) {
+                HBaseUtils.createTable(Constants.HBASE_NAMESPACE, tableProcessDim.getSinkTable(), tableProcessDim.getSinkFamily());
+            }
+            
+            private void deleteTable(TableProcessDim tableProcessDim) {
+                HBaseUtils.deleteTable(Constants.HBASE_NAMESPACE, tableProcessDim.getSinkTable());
             }
             
             @Override
@@ -62,6 +83,8 @@ public class DimApp extends BaseApp {
                 HBaseUtils.closeConnection();
             }
         });
+        
+        createHBaseTableStream.print();
     }
     
     private SingleOutputStreamOperator<JSONObject> etlData(DataStreamSource<String> source) {

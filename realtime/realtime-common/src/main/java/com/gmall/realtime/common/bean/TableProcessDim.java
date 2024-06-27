@@ -1,4 +1,4 @@
-package com.gmall.realtime.dim.bean;
+package com.gmall.realtime.common.bean;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

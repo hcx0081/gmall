@@ -16,18 +16,7 @@ import java.util.List;
  */
 @Slf4j
 public class HBaseUtils {
-    private static final Connection connection;
-    
-    static {
-        Configuration conf = new Configuration();
-        conf.set("hbase.zookeeper.quorum", "192.168.100.100");
-        try {
-            connection = ConnectionFactory.createConnection(conf);
-            log.info("创建HBase连接成功！");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
+    private static Connection connection;
     
     /**
      * 获取HBase连接
@@ -35,6 +24,18 @@ public class HBaseUtils {
      * @return HBase连接
      */
     public static Connection getConnection() {
+        if (connection == null || connection.isClosed()) {
+            Configuration conf = new Configuration();
+            conf.set("hbase.zookeeper.quorum", "192.168.100.100");
+            try {
+                connection = ConnectionFactory.createConnection(conf);
+                log.info("创建HBase连接成功！");
+                return connection;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        log.info("获取HBase连接成功！");
         return connection;
     }
     
@@ -105,7 +106,6 @@ public class HBaseUtils {
             throw new RuntimeException(e);
         }
     }
-    
     
     /**
      * 修改表格
