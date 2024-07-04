@@ -21,9 +21,8 @@ public class FlinkSourceUtils {
                                                      .setStartingOffsets(OffsetsInitializer.earliest())
                                                      .setGroupId(groupId)
                                                      .setValueOnlyDeserializer(
-                                                             // 解决null值问题
                                                              // new SimpleStringSchema()
-                                                             new MySimpleStringSchema()
+                                                             new MySimpleStringSchema()// 解决null值问题
                                                      )
                                                      .build();
         return kafkaSource;
