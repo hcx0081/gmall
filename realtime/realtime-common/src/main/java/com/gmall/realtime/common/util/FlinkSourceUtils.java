@@ -26,7 +26,6 @@ public class FlinkSourceUtils {
                                                      )
                                                      .build();
         return kafkaSource;
-        
     }
     
     public static MySqlSource<String> getMySqlSource(String databaseName, String tableName) {

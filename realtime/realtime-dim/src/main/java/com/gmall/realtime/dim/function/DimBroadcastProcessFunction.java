@@ -17,11 +17,11 @@ import java.util.List;
 
 public class DimBroadcastProcessFunction extends BroadcastProcessFunction<JSONObject, TableProcessDim, Tuple2<JSONObject, TableProcessDim>> {
     
-    private final MapStateDescriptor<String, TableProcessDim> processDimMapStateDescriptor;
+    private final MapStateDescriptor<String, TableProcessDim> mapStateDescriptor;
     private final HashMap<String, TableProcessDim> map = new HashMap<>();
     
-    public DimBroadcastProcessFunction(MapStateDescriptor<String, TableProcessDim> processDimMapStateDescriptor) {
-        this.processDimMapStateDescriptor = processDimMapStateDescriptor;
+    public DimBroadcastProcessFunction(MapStateDescriptor<String, TableProcessDim> mapStateDescriptor) {
+        this.mapStateDescriptor = mapStateDescriptor;
     }
     
     @Override
@@ -39,7 +39,7 @@ public class DimBroadcastProcessFunction extends BroadcastProcessFunction<JSONOb
     // 处理广播流数据
     @Override
     public void processBroadcastElement(TableProcessDim value, BroadcastProcessFunction<JSONObject, TableProcessDim, Tuple2<JSONObject, TableProcessDim>>.Context ctx, Collector<Tuple2<JSONObject, TableProcessDim>> out) throws Exception {
-        BroadcastState<String, TableProcessDim> broadcastState = ctx.getBroadcastState(processDimMapStateDescriptor);
+        BroadcastState<String, TableProcessDim> broadcastState = ctx.getBroadcastState(mapStateDescriptor);
         String op = value.getOp();
         if ("d".equals(op)) {
             broadcastState.remove(value.getSourceTable());
@@ -52,7 +52,7 @@ public class DimBroadcastProcessFunction extends BroadcastProcessFunction<JSONOb
     // 处理主流数据
     @Override
     public void processElement(JSONObject value, BroadcastProcessFunction<JSONObject, TableProcessDim, Tuple2<JSONObject, TableProcessDim>>.ReadOnlyContext ctx, Collector<Tuple2<JSONObject, TableProcessDim>> out) throws Exception {
-        ReadOnlyBroadcastState<String, TableProcessDim> broadcastState = ctx.getBroadcastState(processDimMapStateDescriptor);
+        ReadOnlyBroadcastState<String, TableProcessDim> broadcastState = ctx.getBroadcastState(mapStateDescriptor);
         String table = value.getString("table");
         TableProcessDim tableProcessDim = broadcastState.get(table);
         if (tableProcessDim == null) {

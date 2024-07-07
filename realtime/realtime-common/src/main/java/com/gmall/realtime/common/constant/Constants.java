@@ -24,23 +24,23 @@ public interface Constants {
     String HBASE_NAMESPACE = "gmall";
     
     /* 主题 */
-    String TOPIC_DWD_TRAFFIC_START = "dwd_traffic_start";
-    String TOPIC_DWD_TRAFFIC_ERR = "dwd_traffic_err";
-    String TOPIC_DWD_TRAFFIC_PAGE = "dwd_traffic_page";
-    String TOPIC_DWD_TRAFFIC_ACTION = "dwd_traffic_action";
-    String TOPIC_DWD_TRAFFIC_DISPLAY = "dwd_traffic_display";
+    String TOPIC_DWD_TRAFFIC_START = "topic_dwd_traffic_start";
+    String TOPIC_DWD_TRAFFIC_ERR = "topic_dwd_traffic_err";
+    String TOPIC_DWD_TRAFFIC_PAGE = "topic_dwd_traffic_page";
+    String TOPIC_DWD_TRAFFIC_ACTION = "topic_dwd_traffic_action";
+    String TOPIC_DWD_TRAFFIC_DISPLAY = "topic_dwd_traffic_display";
     
-    String TOPIC_DWD_INTERACTION_COMMENT_INFO = "dwd_interaction_comment_info";
-    String TOPIC_DWD_TRADE_CART_ADD = "dwd_trade_cart_add";
+    String TOPIC_DWD_INTERACTION_COMMENT_INFO = "topic_dwd_interaction_comment_info";
+    String TOPIC_DWD_TRADE_CART_ADD = "topic_dwd_trade_cart_add";
     
-    String TOPIC_DWD_TRADE_ORDER_DETAIL = "dwd_trade_order_detail";
+    String TOPIC_DWD_TRADE_ORDER_DETAIL = "topic_dwd_trade_order_detail";
     
-    String TOPIC_DWD_TRADE_ORDER_CANCEL = "dwd_trade_order_cancel";
+    String TOPIC_DWD_TRADE_ORDER_CANCEL = "topic_dwd_trade_order_cancel";
     
-    String TOPIC_DWD_TRADE_ORDER_PAYMENT_SUCCESS = "dwd_trade_order_payment_success";
-    String TOPIC_DWD_TRADE_ORDER_REFUND = "dwd_trade_order_refund";
+    String TOPIC_DWD_TRADE_ORDER_PAYMENT_SUCCESS = "topic_dwd_trade_order_payment_success";
+    String TOPIC_DWD_TRADE_ORDER_REFUND = "topic_dwd_trade_order_refund";
     
-    String TOPIC_DWD_TRADE_REFUND_PAYMENT_SUCCESS = "dwd_trade_refund_payment_success";
+    String TOPIC_DWD_TRADE_REFUND_PAYMENT_SUCCESS = "topic_dwd_trade_refund_payment_success";
     
-    String TOPIC_DWD_USER_REGISTER = "dwd_user_register";
+    String TOPIC_DWD_USER_REGISTER = "topic_dwd_user_register";
 }

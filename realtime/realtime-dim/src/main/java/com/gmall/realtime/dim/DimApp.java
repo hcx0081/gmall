@@ -44,17 +44,17 @@ public class DimApp extends BaseApp {
         SingleOutputStreamOperator<TableProcessDim> createHBaseTableStream = createHBaseTable(env);
         
         /* 4. 创建广播流 */
-        MapStateDescriptor<String, TableProcessDim> processDimMapStateDescriptor = new MapStateDescriptor<>(
+        MapStateDescriptor<String, TableProcessDim> mapStateDescriptor = new MapStateDescriptor<>(
                 "broadcast-state",
                 String.class,
                 TableProcessDim.class
         );
-        BroadcastStream<TableProcessDim> broadcastStateStream = createHBaseTableStream.broadcast(processDimMapStateDescriptor);
+        BroadcastStream<TableProcessDim> broadcastStateStream = createHBaseTableStream.broadcast(mapStateDescriptor);
         
         /* 5. 连接主流和广播流 */
         BroadcastConnectedStream<JSONObject, TableProcessDim> connectedStream = jsonObjStream.connect(broadcastStateStream);
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcessDim>> processStream =
-                connectedStream.process(new DimBroadcastProcessFunction(processDimMapStateDescriptor))
+                connectedStream.process(new DimBroadcastProcessFunction(mapStateDescriptor))
                                // 注意需要设置并行度为1
                                .setParallelism(1);
         
