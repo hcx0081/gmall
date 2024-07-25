@@ -2,6 +2,7 @@ package com.gmall.realtime.dwd;
 
 import com.gmall.realtime.common.base.BaseSQLApp;
 import com.gmall.realtime.common.constant.Constants;
+import com.gmall.realtime.common.util.FlinkSQLUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
@@ -57,5 +58,22 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
         createTopicDwdInteractionCommentInfoToKafka(tEnv);
         
         joinTable.insertInto(Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO).execute();
+    }
+    
+    private void createTopicDwdInteractionCommentInfoToKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql("CREATE TABLE " + Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO + "\n" +
+                "(\n" +
+                "    `id`               STRING,\n" +
+                "    `user_id`          STRING,\n" +
+                "    `nick_name`        STRING,\n" +
+                "    `sku_id`           STRING,\n" +
+                "    `spu_id`           STRING,\n" +
+                "    `order_id`         STRING,\n" +
+                "    `appraise_code`    STRING,\n" +
+                "    `appraise_name`    STRING,\n" +
+                "    `comment_txt`      STRING,\n" +
+                "    `create_time`      STRING,\n" +
+                "    `operate_time`     STRING\n" +
+                ")" + FlinkSQLUtils.withSQLToKafka(Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO));
     }
 }

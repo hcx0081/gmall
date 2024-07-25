@@ -17,7 +17,7 @@ public class FlinkSQLUtils {
                 ")";
     }
     
-    private static String withSQLToKafka(String topic) {
+    public static String withSQLToKafka(String topic) {
         return "WITH (\n" +
                 "  'connector' = 'kafka',\n" +
                 "  'topic' = '" + topic + "',\n" +
@@ -37,23 +37,6 @@ public class FlinkSQLUtils {
                 "    `old`      MAP<STRING, STRING>,\n" +
                 "    `proc_time` as PROCTIME()\n" +
                 ")" + withSQLFromKafka(Constants.TOPIC_DB, groupId);
-    }
-    
-    public static String createTopicDwdInteractionCommentInfoToKafka() {
-        return "CREATE TABLE " + Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO + "\n" +
-                "(\n" +
-                "    `id`               STRING,\n" +
-                "    `user_id`          STRING,\n" +
-                "    `nick_name`        STRING,\n" +
-                "    `sku_id`           STRING,\n" +
-                "    `spu_id`           STRING,\n" +
-                "    `order_id`         STRING,\n" +
-                "    `appraise_code`    STRING,\n" +
-                "    `appraise_name`    STRING,\n" +
-                "    `comment_txt`      STRING,\n" +
-                "    `create_time`      STRING,\n" +
-                "    `operate_time`     STRING\n" +
-                ")" + withSQLToKafka(Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO);
     }
     
     public static String createBaseDicFromHBase() {
