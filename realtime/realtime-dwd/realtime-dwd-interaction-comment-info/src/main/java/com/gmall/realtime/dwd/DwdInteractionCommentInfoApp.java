@@ -19,7 +19,8 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
         createBaseDicFromHBase(tEnv);
         
         Table commentInfo = tEnv.sqlQuery(
-                "select data['id']           id,\n" +
+                "select " +
+                        "       data['id']           id,\n" +
                         "       data['user_id']      user_id,\n" +
                         "       data['nick_name']    nick_name,\n" +
                         "       data['head_img']     head_img,\n" +

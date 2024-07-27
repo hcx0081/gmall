@@ -34,8 +34,8 @@ public abstract class BaseSQLApp {
         handle(env, tEnv, ckpsAndGroupId);
     }
     
-    protected void createTopicDbFromKafka(StreamTableEnvironment tEnv, String ckpsAndGroupId) {
-        tEnv.executeSql(FlinkSQLUtils.createTopicDbFromKafka(ckpsAndGroupId));
+    protected void createTopicDbFromKafka(StreamTableEnvironment tEnv, String groupId) {
+        tEnv.executeSql(FlinkSQLUtils.createTopicDbFromKafka(groupId));
     }
     
     protected void createBaseDicFromHBase(StreamTableEnvironment tEnv) {

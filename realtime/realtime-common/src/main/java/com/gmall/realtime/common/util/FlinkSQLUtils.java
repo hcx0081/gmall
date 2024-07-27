@@ -26,6 +26,16 @@ public class FlinkSQLUtils {
                 ")";
     }
     
+    public static String withSQLToUpsertKafka(String topic) {
+        return "WITH (\n" +
+                "  'connector' = 'upsert-kafka',\n" +
+                "  'topic' = '" + topic + "',\n" +
+                "  'properties.bootstrap.servers' = '" + Constants.KAFKA_BOOTSTRAP_SERVERS + "',\n" +
+                "  'key.format' = 'json',\n" +
+                "  'value.format' = 'json'\n" +
+                ")";
+    }
+    
     public static String createTopicDbFromKafka(String groupId) {
         return "CREATE TABLE " + Constants.TOPIC_DB + "\n" +
                 "(\n" +
