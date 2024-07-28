@@ -14,6 +14,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
         new DwdTradeOrderDetailApp().start(10014, 4, "dwd-trade-order-detail-app");
     }
     
+    
     @Override
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv, String groupId) {
         /* 必须设置超时时长！！！ */
@@ -23,63 +24,16 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
         
         // order_detail、order_info、order_detail_activity、order_detail_coupon
         
-        Table orderDetail = tEnv.sqlQuery(
-                "select " +
-                        "       data['id']                      id,\n" +
-                        "       data['order_id']                order_id,\n" +
-                        "       data['sku_id']                  sku_id,\n" +
-                        "       data['sku_name']                sku_name,\n" +
-                        "       data['order_price']             order_price,\n" +
-                        "       data['create_time']             create_time,\n" +
-                        "       data['split_total_amount']      split_total_amount,\n" +
-                        "       data['split_activity_amount']   split_activity_amount,\n" +
-                        "       data['split_coupon_amount']     split_coupon_amount,\n" +
-                        "       ts\n" +
-                        "from topic_db\n" +
-                        "where `database` = 'gmall'\n" +
-                        "  and `table` = 'order_detail'\n" +
-                        "  and `type` = 'insert'"
-        );
-        
+        Table orderDetail = selectOrderDetail(tEnv);
         tEnv.createTemporaryView("order_detail", orderDetail);
         
-        Table orderInfo = tEnv.sqlQuery(
-                "select " +
-                        "       data['id']              id,\n" +
-                        "       data['user_id']         user_id,\n" +
-                        "       data['province_id']     province_id,\n" +
-                        "       ts\n" +
-                        "from topic_db\n" +
-                        "where `database` = 'gmall'\n" +
-                        "  and `table` = 'order_info'\n" +
-                        "  and `type` = 'insert'"
-        );
-        
+        Table orderInfo = selectOrderInfo(tEnv);
         tEnv.createTemporaryView("order_info", orderInfo);
         
-        Table orderDetailActivity = tEnv.sqlQuery(
-                "select " +
-                        "       data['order_detail_id']     order_detail_id,\n" +
-                        "       data['activity_id']         activity_id,\n" +
-                        "       data['activity_rule_id']    activity_rule_id,\n" +
-                        "       ts\n" +
-                        "from topic_db\n" +
-                        "where `database` = 'gmall'\n" +
-                        "  and `table` = 'order_detail_activity'\n" +
-                        "  and `type` = 'insert'"
-        );
+        Table orderDetailActivity = selectOrderDetailActivity(tEnv);
         tEnv.createTemporaryView("order_detail_activity", orderDetailActivity);
         
-        Table orderDetailCoupon = tEnv.sqlQuery(
-                "select " +
-                        "       data['order_detail_id']     order_detail_id,\n" +
-                        "       data['coupon_id']           coupon_id,\n" +
-                        "       ts\n" +
-                        "from topic_db\n" +
-                        "where `database` = 'gmall'\n" +
-                        "  and `table` = 'order_detail_coupon'\n" +
-                        "  and `type` = 'insert'"
-        );
+        Table orderDetailCoupon = selectOrderDetailCoupon(tEnv);
         tEnv.createTemporaryView("order_detail_coupon", orderDetailCoupon);
         
         Table joinTable = tEnv.sqlQuery(
@@ -110,6 +64,68 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
         joinTable.insertInto(Constants.TOPIC_DWD_TRADE_ORDER_DETAIL).execute();
     }
     
+    
+    private Table selectOrderDetail(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
+                "select " +
+                        "       data['id']                      id,\n" +
+                        "       data['order_id']                order_id,\n" +
+                        "       data['sku_id']                  sku_id,\n" +
+                        "       data['sku_name']                sku_name,\n" +
+                        "       data['order_price']             order_price,\n" +
+                        "       data['create_time']             create_time,\n" +
+                        "       data['split_total_amount']      split_total_amount,\n" +
+                        "       data['split_activity_amount']   split_activity_amount,\n" +
+                        "       data['split_coupon_amount']     split_coupon_amount,\n" +
+                        "       ts\n" +
+                        "from topic_db\n" +
+                        "where `database` = 'gmall'\n" +
+                        "  and `table` = 'order_detail'\n" +
+                        "  and `type` = 'insert'"
+        );
+    }
+    
+    private Table selectOrderInfo(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
+                "select " +
+                        "       data['id']              id,\n" +
+                        "       data['user_id']         user_id,\n" +
+                        "       data['province_id']     province_id,\n" +
+                        "       ts\n" +
+                        "from topic_db\n" +
+                        "where `database` = 'gmall'\n" +
+                        "  and `table` = 'order_info'\n" +
+                        "  and `type` = 'insert'"
+        );
+    }
+    
+    private Table selectOrderDetailActivity(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
+                "select " +
+                        "       data['order_detail_id']     order_detail_id,\n" +
+                        "       data['activity_id']         activity_id,\n" +
+                        "       data['activity_rule_id']    activity_rule_id,\n" +
+                        "       ts\n" +
+                        "from topic_db\n" +
+                        "where `database` = 'gmall'\n" +
+                        "  and `table` = 'order_detail_activity'\n" +
+                        "  and `type` = 'insert'"
+        );
+    }
+    
+    private Table selectOrderDetailCoupon(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
+                "select " +
+                        "       data['order_detail_id']     order_detail_id,\n" +
+                        "       data['coupon_id']           coupon_id,\n" +
+                        "       ts\n" +
+                        "from topic_db\n" +
+                        "where `database` = 'gmall'\n" +
+                        "  and `table` = 'order_detail_coupon'\n" +
+                        "  and `type` = 'insert'"
+        );
+    }
+    
     public void createTopicDwdTradeOrderDetailToKafka(StreamTableEnvironment tEnv) {
         tEnv.executeSql("CREATE TABLE " + Constants.TOPIC_DWD_TRADE_ORDER_DETAIL + "\n" +
                 "(\n" +
@@ -128,7 +144,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                 "    activity_rule_id      string,\n" +
                 "    coupon_id             string,\n" +
                 "    ts                    bigint,\n" +
-                "PRIMARY KEY (id) NOT ENFORCED" +
-                ")" + FlinkSQLUtils.withSQLToUpsertKafka(Constants.TOPIC_DWD_TRADE_CART_ADD));
+                "    PRIMARY KEY (id) NOT ENFORCED" +
+                ")" + FlinkSQLUtils.withSQLToUpsertKafka(Constants.TOPIC_DWD_TRADE_ORDER_DETAIL));
     }
 }

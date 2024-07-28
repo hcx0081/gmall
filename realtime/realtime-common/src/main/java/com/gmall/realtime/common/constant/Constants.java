@@ -31,6 +31,7 @@ public interface Constants {
     String TOPIC_DWD_TRAFFIC_DISPLAY = "topic_dwd_traffic_display";
     
     String TOPIC_DWD_INTERACTION_COMMENT_INFO = "topic_dwd_interaction_comment_info";
+    
     String TOPIC_DWD_TRADE_CART_ADD = "topic_dwd_trade_cart_add";
     
     String TOPIC_DWD_TRADE_ORDER_DETAIL = "topic_dwd_trade_order_detail";
@@ -38,6 +39,7 @@ public interface Constants {
     String TOPIC_DWD_TRADE_ORDER_CANCEL = "topic_dwd_trade_order_cancel";
     
     String TOPIC_DWD_TRADE_ORDER_PAYMENT_SUCCESS = "topic_dwd_trade_order_payment_success";
+    
     String TOPIC_DWD_TRADE_ORDER_REFUND = "topic_dwd_trade_order_refund";
     
     String TOPIC_DWD_TRADE_REFUND_PAYMENT_SUCCESS = "topic_dwd_trade_refund_payment_success";

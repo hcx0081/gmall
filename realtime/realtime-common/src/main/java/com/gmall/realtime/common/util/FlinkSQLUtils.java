@@ -6,7 +6,7 @@ import com.gmall.realtime.common.constant.Constants;
  * Flink SQL工具类
  */
 public class FlinkSQLUtils {
-    private static String withSQLFromKafka(String topic, String groupId) {
+    public static String withSQLFromKafka(String topic, String groupId) {
         return "WITH (\n" +
                 "  'connector' = 'kafka',\n" +
                 "  'topic' = '" + topic + "',\n" +
@@ -45,7 +45,10 @@ public class FlinkSQLUtils {
                 "    `ts`       BIGINT,\n" +
                 "    `data`     MAP<STRING, STRING>,\n" +
                 "    `old`      MAP<STRING, STRING>,\n" +
-                "    `proc_time` as PROCTIME()\n" +
+                "    `proc_time` as PROCTIME(),\n" +
+                
+                "    `event_time` as TO_TIMESTAMP_LTZ(`ts`, 0),\n" +
+                "    WATERMARK FOR event_time AS event_time - INTERVAL '4' SECOND\n" +
                 ")" + withSQLFromKafka(Constants.TOPIC_DB, groupId);
     }
     

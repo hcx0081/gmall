@@ -16,7 +16,15 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv, String groupId) {
         createTopicDbFromKafka(tEnv, groupId);
         
-        Table cartInfo = tEnv.sqlQuery(
+        Table cartInfo = selectCartInfo(tEnv);
+        
+        createTopicDwdTradeCartAddToKafka(tEnv);
+        
+        cartInfo.insertInto(Constants.TOPIC_DWD_TRADE_CART_ADD).execute();
+    }
+    
+    private Table selectCartInfo(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
                 "select " +
                         "       data['id']                                                                                                          id,\n" +
                         "       data['user_id']                                                                                                     user_id,\n" +
@@ -38,10 +46,6 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
                         "  and (`type` = 'insert' or " +
                         "(`type` = 'update' and `old`['sku_num'] is not null and cast(`data`['sku_num'] as bigint) > cast(`old`['sku_num'] as bigint)))"
         );
-        
-        createTopicDwdTradeCartAddToKafka(tEnv);
-        
-        cartInfo.insertInto(Constants.TOPIC_DWD_TRADE_CART_ADD).execute();
     }
     
     public void createTopicDwdTradeCartAddToKafka(StreamTableEnvironment tEnv) {

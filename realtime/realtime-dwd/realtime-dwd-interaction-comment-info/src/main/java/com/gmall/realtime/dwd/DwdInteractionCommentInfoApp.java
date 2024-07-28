@@ -18,26 +18,7 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
         
         createBaseDicFromHBase(tEnv);
         
-        Table commentInfo = tEnv.sqlQuery(
-                "select " +
-                        "       data['id']           id,\n" +
-                        "       data['user_id']      user_id,\n" +
-                        "       data['nick_name']    nick_name,\n" +
-                        "       data['head_img']     head_img,\n" +
-                        "       data['sku_id']       sku_id,\n" +
-                        "       data['spu_id']       spu_id,\n" +
-                        "       data['order_id']     order_id,\n" +
-                        "       data['appraise']     appraise,\n" +
-                        "       data['comment_txt']  comment_txt,\n" +
-                        "       data['create_time']  create_time,\n" +
-                        "       data['operate_time'] operate_time,\n" +
-                        "       proc_time\n" +
-                        "from topic_db\n" +
-                        "where `database` = 'gmall'\n" +
-                        "  and `table` = 'comment_info'\n" +
-                        "  and `type` = 'insert'"
-        );
-        
+        Table commentInfo = selectCommentInfo(tEnv);
         tEnv.createTemporaryView("comment_info", commentInfo);
         
         Table joinTable = tEnv.sqlQuery("select " +
@@ -57,8 +38,29 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
                 "on c.appraise = b.rowkey");
         
         createTopicDwdInteractionCommentInfoToKafka(tEnv);
-        
         joinTable.insertInto(Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO).execute();
+    }
+    
+    private Table selectCommentInfo(StreamTableEnvironment tEnv) {
+        return tEnv.sqlQuery(
+                "select " +
+                        "       data['id']           id,\n" +
+                        "       data['user_id']      user_id,\n" +
+                        "       data['nick_name']    nick_name,\n" +
+                        "       data['head_img']     head_img,\n" +
+                        "       data['sku_id']       sku_id,\n" +
+                        "       data['spu_id']       spu_id,\n" +
+                        "       data['order_id']     order_id,\n" +
+                        "       data['appraise']     appraise,\n" +
+                        "       data['comment_txt']  comment_txt,\n" +
+                        "       data['create_time']  create_time,\n" +
+                        "       data['operate_time'] operate_time,\n" +
+                        "       proc_time\n" +
+                        "from topic_db\n" +
+                        "where `database` = 'gmall'\n" +
+                        "  and `table` = 'comment_info'\n" +
+                        "  and `type` = 'insert'"
+        );
     }
     
     private void createTopicDwdInteractionCommentInfoToKafka(StreamTableEnvironment tEnv) {
