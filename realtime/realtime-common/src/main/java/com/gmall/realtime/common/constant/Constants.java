@@ -14,8 +14,9 @@ public interface Constants {
     String MYSQL_USERNAME = "root";
     String MYSQL_PASSWORD = "200081";
     
-    String CONFIG_DATABASE = "gmall_config";
-    String CONFIG_TABLE = "table_process_dim";
+    String GMALL_CONFIG_DATABASE = "gmall_config";
+    String GMALL_CONFIG_DIM_TABLE = "table_process_dim";
+    String GMALL_CONFIG_DWD_TABLE = "table_process_dwd";
     
     String MYSQL_DRIVER = "com.mysql.cj.jdbc.Driver";
     String MYSQL_URL = "jdbc:mysql://192.168.100.100:3306?useSSL=false";

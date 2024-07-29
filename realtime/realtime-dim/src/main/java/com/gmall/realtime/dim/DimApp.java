@@ -37,7 +37,7 @@ public class DimApp extends BaseApp {
     @Override
     public void handle(StreamExecutionEnvironment env, DataStreamSource<String> source) {
         /* 1. 从Kafka中ETL数据 */
-        SingleOutputStreamOperator<JSONObject> jsonObjStream = etlData(source);
+        SingleOutputStreamOperator<JSONObject> jsonObjectStream = etlData(source);
         
         /* 2. 使用Flink-CDC监控配置表数据 */
         /* 3. 在HBase中创建维度表 */
@@ -49,10 +49,9 @@ public class DimApp extends BaseApp {
                 String.class,
                 TableProcessDim.class
         );
-        BroadcastStream<TableProcessDim> broadcastStateStream = createHBaseTableStream.broadcast(mapStateDescriptor);
-        
+        BroadcastStream<TableProcessDim> broadcastStream = createHBaseTableStream.broadcast(mapStateDescriptor);
         /* 5. 连接主流和广播流 */
-        BroadcastConnectedStream<JSONObject, TableProcessDim> connectedStream = jsonObjStream.connect(broadcastStateStream);
+        BroadcastConnectedStream<JSONObject, TableProcessDim> connectedStream = jsonObjectStream.connect(broadcastStream);
         SingleOutputStreamOperator<Tuple2<JSONObject, TableProcessDim>> processStream =
                 connectedStream.process(new DimBroadcastProcessFunction(mapStateDescriptor))
                                // 注意需要设置并行度为1
@@ -126,7 +125,7 @@ public class DimApp extends BaseApp {
     private SingleOutputStreamOperator<TableProcessDim> createHBaseTable(StreamExecutionEnvironment env) {
         DataStreamSource<String> mySqlSource =
                 env.fromSource(
-                           FlinkSourceUtils.getMySqlSource(Constants.CONFIG_DATABASE, Constants.CONFIG_TABLE),
+                           FlinkSourceUtils.getMySqlSource(Constants.GMALL_CONFIG_DATABASE, Constants.GMALL_CONFIG_DIM_TABLE),
                            WatermarkStrategy.noWatermarks(),
                            "cdc-source"
                    )

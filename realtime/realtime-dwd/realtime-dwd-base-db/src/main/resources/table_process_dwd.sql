@@ -3,9 +3,9 @@ use gmall_config;
 drop table if exists `table_process_dwd`;
 create table `table_process_dwd`
 (
-    `source_table` varchar(200) not null comment '来源表',
+    `source_table` varchar(200) not null comment '来源表名',
     `source_type`  varchar(200) not null comment '来源操作类型',
-    `sink_table`   varchar(200) not null comment '输出表',
+    `sink_table`   varchar(200) not null comment '目标表名',
     `sink_columns` varchar(2000) comment '输出字段',
     primary key (`sink_table`)
 ) engine = innodb
