@@ -13,8 +13,8 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
     }
     
     @Override
-    public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv, String groupId) {
-        createTopicDbFromKafka(tEnv, groupId);
+    public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
+        createTopicDbFromKafka(tEnv);
         
         Table cartInfo = selectCartInfo(tEnv);
         

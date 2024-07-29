@@ -12,7 +12,7 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
  * 项目基类
  */
 public abstract class BaseSQLApp {
-    public void start(int port, int parallelism, String ckpsAndGroupId) throws Exception {
+    public void start(int port, int parallelism, String ckps) throws Exception {
         System.setProperty("HADOOP_USER_NAME", "root");
         
         Configuration conf = new Configuration();
@@ -23,7 +23,7 @@ public abstract class BaseSQLApp {
         env.setStateBackend(new HashMapStateBackend());
         env.enableCheckpointing(5000);
         env.getCheckpointConfig().setCheckpointingMode(CheckpointingMode.EXACTLY_ONCE);
-        env.getCheckpointConfig().setCheckpointStorage("hdfs://192.168.100.100:8020/gmall/flink/ckps/" + ckpsAndGroupId);
+        env.getCheckpointConfig().setCheckpointStorage("hdfs://192.168.100.100:8020/gmall/flink/ckps/" + ckps);
         env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(5000);
         env.getCheckpointConfig().setCheckpointTimeout(10000);
@@ -31,16 +31,16 @@ public abstract class BaseSQLApp {
         
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
         
-        handle(env, tEnv, ckpsAndGroupId);
+        handle(env, tEnv);
     }
     
-    protected void createTopicDbFromKafka(StreamTableEnvironment tEnv, String groupId) {
-        tEnv.executeSql(FlinkSQLUtils.createTopicDbFromKafka(groupId));
+    protected void createTopicDbFromKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql(FlinkSQLUtils.createTopicDbFromKafka());
     }
     
     protected void createBaseDicFromHBase(StreamTableEnvironment tEnv) {
         tEnv.executeSql(FlinkSQLUtils.createBaseDicFromHBase());
     }
     
-    public abstract void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv, String groupId);
+    public abstract void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv);
 }

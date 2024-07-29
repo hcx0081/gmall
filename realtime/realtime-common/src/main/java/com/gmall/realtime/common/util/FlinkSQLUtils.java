@@ -36,7 +36,7 @@ public class FlinkSQLUtils {
                 ")";
     }
     
-    public static String createTopicDbFromKafka(String groupId) {
+    public static String createTopicDbFromKafka() {
         return "CREATE TABLE " + Constants.TOPIC_DB + "\n" +
                 "(\n" +
                 "    `database` STRING,\n" +
@@ -49,7 +49,7 @@ public class FlinkSQLUtils {
                 
                 "    `event_time` as TO_TIMESTAMP_LTZ(`ts`, 0),\n" +
                 "    WATERMARK FOR event_time AS event_time - INTERVAL '4' SECOND\n" +
-                ")" + withSQLFromKafka(Constants.TOPIC_DB, groupId);
+                ")" + withSQLFromKafka(Constants.TOPIC_DB, Constants.TOPIC_DB);
     }
     
     public static String createBaseDicFromHBase() {

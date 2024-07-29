@@ -16,11 +16,11 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
     
     
     @Override
-    public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv, String groupId) {
+    public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
         /* 必须设置超时时长！！！ */
         tEnv.getConfig().setIdleStateRetention(Duration.ofSeconds(5));
         
-        createTopicDbFromKafka(tEnv, groupId);
+        createTopicDbFromKafka(tEnv);
         
         // order_detail、order_info、order_detail_activity、order_detail_coupon
         

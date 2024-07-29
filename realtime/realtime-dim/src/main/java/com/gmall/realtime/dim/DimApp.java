@@ -67,12 +67,11 @@ public class DimApp extends BaseApp {
                 
                 JSONObject data = jsonObject.getJSONObject("data");
                 String sinkColumns = tableProcessDim.getSinkColumns();
-                List<String> sinkColumnList = Arrays.asList(sinkColumns.split(","));
+                List<String> sinkColumnList = Arrays.asList(sinkColumns.replaceAll(" ", "").split(","));
                 data.keySet().removeIf(key -> !sinkColumnList.contains(key));
                 return value;
             }
         });
-        filterColumnStream.print();
         
         /* 7. 写入HBase */
         filterColumnStream.addSink(new DimHBaseSinkFunction());
