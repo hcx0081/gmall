@@ -6,9 +6,6 @@ package com.gmall.realtime.common.constant;
 public interface Constants {
     String KAFKA_BOOTSTRAP_SERVERS = "192.168.100.100:9092";
     
-    String TOPIC_DB = "topic_db";
-    String TOPIC_LOG = "topic_log";
-    
     String MYSQL_HOST = "192.168.100.100";
     int MYSQL_PORT = 3306;
     String MYSQL_USERNAME = "root";
@@ -24,7 +21,16 @@ public interface Constants {
     String HBASE_ZOOKEEPER_QUORUM = "192.168.100.100";
     String HBASE_NAMESPACE = "gmall";
     
+    String DORIS_FE_NODES = "192.168.100.100:8030";
+    String DORIS_USERNAME = "root";
+    String DORIS_PASSWORD = "";
+    String DORIS_DATABASE = "gmall";
+    String DORIS_TABLE_DWS_TRAFFIC_SOURCE_KEYWORD_PAGE_VIEW_WINDOW = "dws_traffic_source_keyword_page_view_window";
+    
     /* 主题 */
+    String TOPIC_DB = "topic_db";
+    String TOPIC_LOG = "topic_log";
+    
     String TOPIC_DWD_TRAFFIC_START = "topic_dwd_traffic_start";
     String TOPIC_DWD_TRAFFIC_ERR = "topic_dwd_traffic_err";
     String TOPIC_DWD_TRAFFIC_PAGE = "topic_dwd_traffic_page";

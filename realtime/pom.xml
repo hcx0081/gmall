@@ -23,10 +23,12 @@
         <hadoop.version>3.3.5</hadoop.version>
         <flink.version>1.15.0</flink.version>
         <flink-cdc.vesion>2.4.0</flink-cdc.vesion>
+        <flink-doris.vesion>1.6.0</flink-doris.vesion>
         <scala.version>2.12</scala.version>
         <log4j.version>2.17.1</log4j.version>
         <hbase.version>2.5.0</hbase.version>
         <fastjson2.version>2.0.50</fastjson2.version>
+        <hutool.version>5.8.20</hutool.version>
         <hutool.version>5.8.20</hutool.version>
     </properties>
     
@@ -146,12 +148,6 @@
             </dependency>
             
             <dependency>
-                <groupId>org.apache.doris</groupId>
-                <artifactId>flink-doris-connector-1.17</artifactId>
-                <version>1.4.0</version>
-            </dependency>
-            
-            <dependency>
                 <groupId>org.apache.hbase</groupId>
                 <artifactId>hbase-client</artifactId>
                 <version>${hbase.version}</version>
@@ -167,6 +163,18 @@
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
                 <version>${hutool.version}</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.janeluo</groupId>
+                <artifactId>ikanalyzer</artifactId>
+                <version>2012_u6</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.doris</groupId>
+                <artifactId>flink-doris-connector-1.16</artifactId>
+                <version>${flink-doris.vesion}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

@@ -14,13 +14,13 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
     
     @Override
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
-        createTopicDbFromKafka(tEnv);
+        createTopicDbSourceFromKafka(tEnv);
         
         Table cartInfo = selectCartInfo(tEnv);
         
         createTopicDwdTradeCartAddToKafka(tEnv);
         
-        cartInfo.insertInto(Constants.TOPIC_DWD_TRADE_CART_ADD).execute();
+        cartInfo.insertInto("topic_dwd_trade_cart_add_sink").execute();
     }
     
     private Table selectCartInfo(StreamTableEnvironment tEnv) {
@@ -40,7 +40,7 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
                         "       data['order_time']                                                                                                  order_time,\n" +
                         "       ts,\n" +
                         "       proc_time\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'cart_info'\n" +
                         "  and (`type` = 'insert' or " +
@@ -49,7 +49,7 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
     }
     
     public void createTopicDwdTradeCartAddToKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql("CREATE TABLE " + Constants.TOPIC_DWD_TRADE_CART_ADD + "\n" +
+        tEnv.executeSql("CREATE TABLE topic_dwd_trade_cart_add_sink\n" +
                 "(\n" +
                 "    `id`               STRING,\n" +
                 "    `user_id`          STRING,\n" +

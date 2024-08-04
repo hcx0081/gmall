@@ -19,17 +19,17 @@ public class DwdTradeOrderPaySucApp extends BaseSQLApp {
         /* 必须设置超时时长！！！ */
         tEnv.getConfig().setIdleStateRetention(Duration.ofSeconds(5));
         
-        createTopicDbFromKafka(tEnv);
+        createTopicDbSourceFromKafka(tEnv);
         
         Table paymentInfo = selectPaymentInfo(tEnv);
         tEnv.createTemporaryView("payment_info", paymentInfo);
         
-        createOrderDetailFromKafka(tEnv);
+        createOrderDetailSourceFromKafka(tEnv);
         
         Table paymentOrder = selectPaymentOrder(tEnv);
         tEnv.createTemporaryView("payment_order", paymentOrder);
         
-        createBaseDicFromHBase(tEnv);
+        createBaseDicSourceFromHBase(tEnv);
         
         Table joinTable = tEnv.sqlQuery("SELECT " +
                 "       id,\n" +
@@ -49,11 +49,11 @@ public class DwdTradeOrderPaySucApp extends BaseSQLApp {
                 "       coupon_id,\n" +
                 "       ts\n" +
                 "FROM payment_order as po\n" +
-                "         left join base_dic FOR SYSTEM_TIME AS OF po.proc_time as bd\n" +
+                "         left join base_dic_source FOR SYSTEM_TIME AS OF po.proc_time as bd\n" +
                 "on po.payment_type = bd.rowkey");
         
-        createTopicDwdTradeOrderPaymentSuccessToKafka(tEnv);
-        joinTable.insertInto(Constants.TOPIC_DWD_TRADE_ORDER_PAYMENT_SUCCESS).execute();
+        createTopicDwdTradeOrderPaymentSuccessSinkToKafka(tEnv);
+        joinTable.insertInto("topic_dwd_trade_order_payment_success_sink").execute();
     }
     
     private Table selectPaymentInfo(StreamTableEnvironment tEnv) {
@@ -69,7 +69,7 @@ public class DwdTradeOrderPaySucApp extends BaseSQLApp {
                         
                         "       event_time,\n" +
                         "       proc_time\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'payment_info'\n" +
                         "  and `type` = 'update'\n" +
@@ -78,8 +78,8 @@ public class DwdTradeOrderPaySucApp extends BaseSQLApp {
         );
     }
     
-    private void createOrderDetailFromKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql("CREATE TABLE order_detail\n" +
+    private void createOrderDetailSourceFromKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql("CREATE TABLE order_detail_source\n" +
                 "(\n" +
                 "    id                    string,\n" +
                 "    order_id              string,\n" +
@@ -122,12 +122,12 @@ public class DwdTradeOrderPaySucApp extends BaseSQLApp {
                 
                 "       proc_time\n" +
                 "FROM payment_info pi\n" +
-                "         left join order_detail od on pi.order_id = od.order_id\n" +
+                "         left join order_detail_source od on pi.order_id = od.order_id\n" +
                 "where od.event_time BETWEEN od.event_time - INTERVAL '15' MINUTE AND od.event_time + INTERVAL '5' SECOND");
     }
     
-    private void createTopicDwdTradeOrderPaymentSuccessToKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql("create table " + Constants.TOPIC_DWD_TRADE_ORDER_PAYMENT_SUCCESS + "\n" +
+    private void createTopicDwdTradeOrderPaymentSuccessSinkToKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql("create table topic_dwd_trade_order_payment_success_sink\n" +
                 "(\n" +
                 "    id                    string,\n" +
                 "    order_id              string,\n" +

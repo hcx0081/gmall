@@ -14,13 +14,12 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
         new DwdTradeOrderDetailApp().start(10014, 4, "dwd-trade-order-detail-app");
     }
     
-    
     @Override
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
         /* 必须设置超时时长！！！ */
         tEnv.getConfig().setIdleStateRetention(Duration.ofSeconds(5));
         
-        createTopicDbFromKafka(tEnv);
+        createTopicDbSourceFromKafka(tEnv);
         
         // order_detail、order_info、order_detail_activity、order_detail_coupon
         
@@ -59,7 +58,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "         left join order_detail_coupon odc on oda.order_detail_id = od.id"
         );
         
-        createTopicDwdTradeOrderDetailToKafka(tEnv);
+        createTopicDwdTradeOrderDetailSinkToKafka(tEnv);
         
         joinTable.insertInto(Constants.TOPIC_DWD_TRADE_ORDER_DETAIL).execute();
     }
@@ -78,7 +77,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       data['split_activity_amount']   split_activity_amount,\n" +
                         "       data['split_coupon_amount']     split_coupon_amount,\n" +
                         "       ts\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'order_detail'\n" +
                         "  and `type` = 'insert'"
@@ -92,7 +91,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       data['user_id']         user_id,\n" +
                         "       data['province_id']     province_id,\n" +
                         "       ts\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'order_info'\n" +
                         "  and `type` = 'insert'"
@@ -106,7 +105,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       data['activity_id']         activity_id,\n" +
                         "       data['activity_rule_id']    activity_rule_id,\n" +
                         "       ts\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'order_detail_activity'\n" +
                         "  and `type` = 'insert'"
@@ -119,15 +118,15 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       data['order_detail_id']     order_detail_id,\n" +
                         "       data['coupon_id']           coupon_id,\n" +
                         "       ts\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'order_detail_coupon'\n" +
                         "  and `type` = 'insert'"
         );
     }
     
-    public void createTopicDwdTradeOrderDetailToKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql("CREATE TABLE " + Constants.TOPIC_DWD_TRADE_ORDER_DETAIL + "\n" +
+    public void createTopicDwdTradeOrderDetailSinkToKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql("CREATE TABLE topic_dwd_trade_order_detail_sink\n" +
                 "(\n" +
                 "    id                    string,\n" +
                 "    order_id              string,\n" +

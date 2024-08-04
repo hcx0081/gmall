@@ -26,6 +26,19 @@ public class FlinkSQLUtils {
                 ")";
     }
     
+    public static String withSQLToDoris(String table) {
+        return "WITH (\n" +
+                "  'connector' = 'doris',\n" +
+                "  'fenodes' = '" + Constants.DORIS_FE_NODES + "',\n" +
+                "  'table.identifier' = '" + Constants.DORIS_DATABASE + "." + table + "',\n" +
+                "  'username' = '" + Constants.DORIS_USERNAME + "',\n" +
+                "  'password' = '" + Constants.DORIS_PASSWORD + "',\n" +
+                "  'sink.properties.format' = 'json',\n" +
+                "  'sink.properties.read_json_by_line' = 'true',\n" +
+                "  'sink.label-prefix' = 'doris_label_" + System.currentTimeMillis() + "'\n" +
+                ")";
+    }
+    
     public static String withSQLToUpsertKafka(String topic) {
         return "WITH (\n" +
                 "  'connector' = 'upsert-kafka',\n" +
@@ -36,8 +49,8 @@ public class FlinkSQLUtils {
                 ")";
     }
     
-    public static String createTopicDbFromKafka() {
-        return "CREATE TABLE " + Constants.TOPIC_DB + "\n" +
+    public static String createTopicDbSourceFromKafka() {
+        return "CREATE TABLE topic_db_source\n" +
                 "(\n" +
                 "    `database` STRING,\n" +
                 "    `table`    STRING,\n" +
@@ -52,8 +65,8 @@ public class FlinkSQLUtils {
                 ")" + withSQLFromKafka(Constants.TOPIC_DB, Constants.TOPIC_DB);
     }
     
-    public static String createBaseDicFromHBase() {
-        return "CREATE TABLE base_dic\n" +
+    public static String createBaseDicSourceFromHBase() {
+        return "CREATE TABLE base_dic_source\n" +
                 "(\n" +
                 "    rowkey STRING,\n" +
                 "    info ROW <dic_name STRING>,\n" +

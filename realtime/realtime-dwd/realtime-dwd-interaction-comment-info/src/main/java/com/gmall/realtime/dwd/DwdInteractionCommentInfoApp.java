@@ -14,9 +14,9 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
     
     @Override
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
-        createTopicDbFromKafka(tEnv);
+        createTopicDbSourceFromKafka(tEnv);
         
-        createBaseDicFromHBase(tEnv);
+        createBaseDicSourceFromHBase(tEnv);
         
         Table commentInfo = selectCommentInfo(tEnv);
         tEnv.createTemporaryView("comment_info", commentInfo);
@@ -34,11 +34,11 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
                 "       create_time,\n" +
                 "       operate_time\n" +
                 "from comment_info c\n" +
-                "         join base_dic for system_time as of c.proc_time as b\n" +
+                "         join base_dic_source for system_time as of c.proc_time as b\n" +
                 "on c.appraise = b.rowkey");
         
         createTopicDwdInteractionCommentInfoToKafka(tEnv);
-        joinTable.insertInto(Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO).execute();
+        joinTable.insertInto("topic_dwd_interaction_comment_info_sink").execute();
     }
     
     private Table selectCommentInfo(StreamTableEnvironment tEnv) {
@@ -56,7 +56,7 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
                         "       data['create_time']  create_time,\n" +
                         "       data['operate_time'] operate_time,\n" +
                         "       proc_time\n" +
-                        "from topic_db\n" +
+                        "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'comment_info'\n" +
                         "  and `type` = 'insert'"
@@ -64,7 +64,7 @@ public class DwdInteractionCommentInfoApp extends BaseSQLApp {
     }
     
     private void createTopicDwdInteractionCommentInfoToKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql("CREATE TABLE " + Constants.TOPIC_DWD_INTERACTION_COMMENT_INFO + "\n" +
+        tEnv.executeSql("CREATE TABLE topic_dwd_interaction_comment_info_sink\n" +
                 "(\n" +
                 "    `id`               STRING,\n" +
                 "    `user_id`          STRING,\n" +

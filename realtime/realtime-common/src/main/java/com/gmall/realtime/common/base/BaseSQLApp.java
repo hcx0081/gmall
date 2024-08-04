@@ -34,12 +34,12 @@ public abstract class BaseSQLApp {
         handle(env, tEnv);
     }
     
-    protected void createTopicDbFromKafka(StreamTableEnvironment tEnv) {
-        tEnv.executeSql(FlinkSQLUtils.createTopicDbFromKafka());
+    protected void createTopicDbSourceFromKafka(StreamTableEnvironment tEnv) {
+        tEnv.executeSql(FlinkSQLUtils.createTopicDbSourceFromKafka());
     }
     
-    protected void createBaseDicFromHBase(StreamTableEnvironment tEnv) {
-        tEnv.executeSql(FlinkSQLUtils.createBaseDicFromHBase());
+    protected void createBaseDicSourceFromHBase(StreamTableEnvironment tEnv) {
+        tEnv.executeSql(FlinkSQLUtils.createBaseDicSourceFromHBase());
     }
     
     public abstract void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv);
