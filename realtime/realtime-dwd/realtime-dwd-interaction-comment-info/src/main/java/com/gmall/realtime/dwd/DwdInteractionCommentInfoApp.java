@@ -7,6 +7,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
+/**
+ * 互动域评论事务事实表
+ */
 public class DwdInteractionCommentInfoApp extends BaseSQLApp {
     public static void main(String[] args) throws Exception {
         new DwdInteractionCommentInfoApp().start(10012, 4, "dwd-interaction-comment-info-app");

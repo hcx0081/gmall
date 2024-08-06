@@ -9,6 +9,9 @@ import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
 import java.time.Duration;
 
+/**
+ * 交易域支付成功事务事实表
+ */
 public class DwdTradeOrderPaySucApp extends BaseSQLApp {
     public static void main(String[] args) throws Exception {
         new DwdTradeOrderPaySucApp().start(10016, 4, "dwd-trade-order-pay-suc-app");

@@ -8,9 +8,12 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-public class DwsRealtimeDwsTrafficSourceKeywordPageViewWindowApp extends BaseSQLApp {
+/**
+ * 流量域搜索关键词粒度页面浏览各窗口汇总表
+ */
+public class DwsTrafficSourceKeywordPageViewWindowApp extends BaseSQLApp {
     public static void main(String[] args) throws Exception {
-        new DwsRealtimeDwsTrafficSourceKeywordPageViewWindowApp().start(10021, 4, "dws-realtime-dws-traffic-source-keyword-page-view-window-app");
+        new DwsTrafficSourceKeywordPageViewWindowApp().start(10021, 4, "dws-traffic-source-keyword-page-view-window-app");
     }
     
     @Override

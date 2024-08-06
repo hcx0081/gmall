@@ -1,5 +1,6 @@
 create database if not exists gmall;
 
+drop table if exists gmall.dws_traffic_source_keyword_page_view_window;
 create table if not exists gmall.dws_traffic_source_keyword_page_view_window
 (
     `stt`           DATETIME COMMENT '窗口起始时间',

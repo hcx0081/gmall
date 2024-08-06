@@ -31,6 +31,9 @@ import org.apache.flink.util.OutputTag;
 
 import java.time.temporal.ChronoUnit;
 
+/**
+ * 日志分流
+ */
 public class DwdBaseLogApp extends BaseApp {
     public static void main(String[] args) throws Exception {
         new DwdBaseLogApp().start(10011, 4, "dwd-base-log-app", Constants.TOPIC_LOG);

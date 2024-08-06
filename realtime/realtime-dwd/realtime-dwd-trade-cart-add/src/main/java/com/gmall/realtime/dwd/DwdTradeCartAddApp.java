@@ -7,6 +7,9 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
+/**
+ * 交易域加购事务事实表
+ */
 public class DwdTradeCartAddApp extends BaseSQLApp {
     public static void main(String[] args) throws Exception {
         new DwdTradeCartAddApp().start(10013, 4, "dwd-trade-cart-add-app");

@@ -1,22 +1,17 @@
-package com.gmall.realtime.dwd;
+package com.gmall.realtime.dws;
 
 import com.gmall.realtime.common.base.BaseSQLApp;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 
-import java.time.Duration;
-
 /**
- * 交易域取消订单事务事实表
+ * 流量域搜索关键词粒度页面浏览各窗口汇总表
  */
-public class DwdTradeOrderCancelDetailApp extends BaseSQLApp {
+public class DwsTrafficHomeDetailPageViewWindowApp extends BaseSQLApp {
     public static void main(String[] args) throws Exception {
-        new DwdTradeOrderCancelDetailApp().start(10015, 4, "dwd-trade-order-cancel-detail-app");
     }
     
     @Override
     public void handle(StreamExecutionEnvironment env, StreamTableEnvironment tEnv) {
-        /* 必须设置超时时长！！！ */
-        tEnv.getConfig().setIdleStateRetention(Duration.ofSeconds(60 * 30 + 5));
     }
 }
