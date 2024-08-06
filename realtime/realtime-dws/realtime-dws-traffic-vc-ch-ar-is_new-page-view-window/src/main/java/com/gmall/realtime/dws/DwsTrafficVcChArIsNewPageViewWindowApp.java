@@ -1,12 +1,11 @@
 package com.gmall.realtime.dws;
 
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.gmall.realtime.common.base.BaseApp;
 import com.gmall.realtime.common.bean.TrafficPageView;
 import com.gmall.realtime.common.constant.Constants;
+import com.gmall.realtime.common.util.DateFormatUtils;
 import com.gmall.realtime.common.util.FlinkSinkUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.api.common.eventtime.SerializableTimestampAssigner;
@@ -46,11 +45,14 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
         SingleOutputStreamOperator<JSONObject> jsonObjectStream = source.flatMap(new FlatMapFunction<String, JSONObject>() {
             @Override
             public void flatMap(String value, Collector<JSONObject> out) throws Exception {
-                JSONObject jsonObject = JSON.parseObject(value);
-                Long ts = jsonObject.getLong("ts");
-                String mid = jsonObject.getJSONObject("common").getString("mid");
-                if (ts != null && StringUtils.isNotBlank(mid)) {
-                    out.collect(jsonObject);
+                boolean isJsonObj = JSON.isValidObject(value);
+                if (isJsonObj) {
+                    JSONObject jsonObject = JSON.parseObject(value);
+                    Long ts = jsonObject.getLong("ts");
+                    String mid = jsonObject.getJSONObject("common").getString("mid");
+                    if (ts != null && StringUtils.isNotBlank(mid)) {
+                        out.collect(jsonObject);
+                    }
                 }
             }
         });
@@ -91,7 +93,7 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
                 String isNew = common.getString("is_new");
                 
                 Long ts = value.getLong("ts");
-                String curDate = LocalDateTimeUtil.format(LocalDateTimeUtil.of(ts), DatePattern.NORM_DATE_PATTERN);
+                String curDate = DateFormatUtils.tsToDateString(ts);
                 String lastLoginDt = lastLoginDtValueState.value();
                 Long uvCt = 0L;
                 if (lastLoginDt == null || !lastLoginDt.equals(curDate)) {
@@ -171,9 +173,9 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
                     public void process(String s, ProcessWindowFunction<TrafficPageView, TrafficPageView, String, TimeWindow>.Context context, Iterable<TrafficPageView> elements, Collector<TrafficPageView> out) throws Exception {
                         TimeWindow window = context.window();
                         
-                        String stt = LocalDateTimeUtil.format(LocalDateTimeUtil.of(window.getStart()), DatePattern.NORM_DATETIME_PATTERN);
-                        String edt = LocalDateTimeUtil.format(LocalDateTimeUtil.of(window.getEnd()), DatePattern.NORM_DATETIME_PATTERN);
-                        String curDate = LocalDateTimeUtil.format(LocalDateTimeUtil.of(System.currentTimeMillis()), DatePattern.NORM_DATE_PATTERN);
+                        String stt = DateFormatUtils.tsToDateTimeString(window.getStart());
+                        String edt = DateFormatUtils.tsToDateTimeString(window.getEnd());
+                        String curDate = DateFormatUtils.tsToDateString(System.currentTimeMillis());
                         for (TrafficPageView trafficPageView : elements) {
                             trafficPageView.setStt(stt);
                             trafficPageView.setEdt(edt);
@@ -184,7 +186,6 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
                 });
         
         SingleOutputStreamOperator<String> mapStream = reducedStream.map(JSON::toJSONString);
-        
         mapStream.sinkTo(FlinkSinkUtils.getDorisSink(Constants.DORIS_TABLE_DWS_TRAFFIC_VC_CH_AR_IS_NEW_PAGE_VIEW_WINDOW));
     }
 }

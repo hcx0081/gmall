@@ -7,6 +7,7 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.gmall.realtime.common.base.BaseApp;
 import com.gmall.realtime.common.constant.Constants;
+import com.gmall.realtime.common.util.DateFormatUtils;
 import com.gmall.realtime.common.util.FlinkSinkUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.collections.MapUtils;
@@ -195,7 +196,7 @@ public class DwdBaseLogApp extends BaseApp {
                 String isNew = common.getString("is_new");
                 String firstLoginDt = firstLoginDtState.value();
                 Long ts = value.getLong("ts");
-                String currentDt = LocalDateTimeUtil.format(LocalDateTimeUtil.of(ts), DatePattern.NORM_DATE_PATTERN);
+                String currentDt = DateFormatUtils.tsToDateString(ts);
                 // 新访客
                 if ("1".equals(isNew)) {
                     if (StringUtils.isNotBlank(firstLoginDt) && !firstLoginDt.equals(currentDt)) {
