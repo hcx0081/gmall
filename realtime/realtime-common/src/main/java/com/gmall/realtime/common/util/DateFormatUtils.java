@@ -14,10 +14,14 @@ public class DateFormatUtils {
     }
     
     public static Long dateStringToTs(String date) {
-        return LocalDateTimeUtil.parse(date, DatePattern.NORM_DATE_PATTERN).toEpochSecond(ZoneOffset.UTC);
+        return LocalDateTimeUtil.parse(date, DatePattern.NORM_DATE_PATTERN).toInstant(ZoneOffset.UTC).toEpochMilli();
     }
     
     public static String tsToDateTimeString(Long ts) {
         return LocalDateTimeUtil.format(LocalDateTimeUtil.of(ts), DatePattern.NORM_DATETIME_PATTERN);
+    }
+    
+    public static Long dateTimeStringToTs(String date) {
+        return LocalDateTimeUtil.parse(date, DatePattern.NORM_DATETIME_PATTERN).toInstant(ZoneOffset.UTC).toEpochMilli();
     }
 }

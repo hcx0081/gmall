@@ -32,9 +32,9 @@ import java.time.Duration;
 /**
  * 用户域用户登录各窗口汇总表
  */
-public class DwsUserLoginWindowApp extends BaseApp {
+public class DwsUserUserLoginWindowApp extends BaseApp {
     public static void main(String[] args) throws Exception {
-        new DwsUserLoginWindowApp().start(10024, 4, "dws-user-login-window-app", Constants.TOPIC_DWD_TRAFFIC_PAGE);
+        new DwsUserUserLoginWindowApp().start(10024, 4, "dws-user-user-login-window-app", Constants.TOPIC_DWD_TRAFFIC_PAGE);
     }
     
     @Override

@@ -45,7 +45,7 @@ public class FlinkSinkUtils {
                                                    .setRecordSerializer(new KafkaRecordSerializationSchema<JSONObject>() {
                                                        @Override
                                                        public ProducerRecord<byte[], byte[]> serialize(JSONObject element, KafkaSinkContext context, Long timestamp) {
-                                                           String topic = element.getString("sink_table");
+                                                           String topic = "topic_" + element.getString("sink_table");
                                                            return new ProducerRecord<>(topic, element.toJSONString().getBytes());
                                                        }
                                                    })

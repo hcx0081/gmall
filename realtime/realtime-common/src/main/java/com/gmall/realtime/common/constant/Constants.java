@@ -29,6 +29,7 @@ public interface Constants {
     String DORIS_TABLE_DWS_TRAFFIC_VC_CH_AR_IS_NEW_PAGE_VIEW_WINDOW = "dws_traffic_vc_ch_ar_is_new_page_view_window";
     String DORIS_TABLE_DWS_TRAFFIC_HOME_DETAIL_PAGE_VIEW_WINDOW = "dws_traffic_home_detail_page_view_window";
     String DORIS_TABLE_DWS_USER_USER_LOGIN_WINDOW = "dws_user_user_login_window";
+    String DORIS_TABLE_DWS_USER_USER_REGISTER_WINDOW = "dws_user_user_register_window";
     
     /* 主题 */
     String TOPIC_DB = "topic_db";
