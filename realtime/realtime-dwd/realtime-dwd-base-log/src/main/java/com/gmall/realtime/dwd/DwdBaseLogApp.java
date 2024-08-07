@@ -131,8 +131,8 @@ public class DwdBaseLogApp extends BaseApp {
         return source.flatMap(new FlatMapFunction<String, JSONObject>() {
             @Override
             public void flatMap(String value, Collector<JSONObject> out) throws Exception {
-                boolean isJsonObj = JSON.isValidObject(value);
-                if (isJsonObj) {
+                boolean isJsonObject = JSON.isValidObject(value);
+                if (isJsonObject) {
                     JSONObject jsonObject = JSON.parseObject(value);
                     JSONObject page = jsonObject.getJSONObject("page");// 页面浏览日志
                     JSONObject start = jsonObject.getJSONObject("start");// 启动日志

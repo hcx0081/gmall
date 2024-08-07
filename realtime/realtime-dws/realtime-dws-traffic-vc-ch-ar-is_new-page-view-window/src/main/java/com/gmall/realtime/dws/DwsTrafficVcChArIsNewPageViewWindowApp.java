@@ -45,8 +45,8 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
         SingleOutputStreamOperator<JSONObject> jsonObjectStream = source.flatMap(new FlatMapFunction<String, JSONObject>() {
             @Override
             public void flatMap(String value, Collector<JSONObject> out) throws Exception {
-                boolean isJsonObj = JSON.isValidObject(value);
-                if (isJsonObj) {
+                boolean isJsonObject = JSON.isValidObject(value);
+                if (isJsonObject) {
                     JSONObject jsonObject = JSON.parseObject(value);
                     Long ts = jsonObject.getLong("ts");
                     String mid = jsonObject.getJSONObject("common").getString("mid");

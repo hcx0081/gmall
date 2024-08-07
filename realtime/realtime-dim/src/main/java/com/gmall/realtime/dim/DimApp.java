@@ -80,8 +80,8 @@ public class DimApp extends BaseApp {
         // return source.filter(new FilterFunction<String>() {
         //     @Override
         //     public boolean filter(String value) throws Exception {
-        //         boolean isJsonObj = JSON.isValidObject(value);
-        //         if (isJsonObj) {
+        //         boolean isJsonObject = JSON.isValidObject(value);
+        //         if (isJsonObject) {
         //             JSONObject jsonObject = JSON.parseObject(value);
         //             String database = jsonObject.getString("database");
         //             String type = jsonObject.getString("type");
@@ -106,8 +106,8 @@ public class DimApp extends BaseApp {
         return source.flatMap(new FlatMapFunction<String, JSONObject>() {
             @Override
             public void flatMap(String value, Collector<JSONObject> out) throws Exception {
-                boolean isJsonObj = JSON.isValidObject(value);
-                if (isJsonObj) {
+                boolean isJsonObject = JSON.isValidObject(value);
+                if (isJsonObject) {
                     JSONObject jsonObject = JSON.parseObject(value);
                     String database = jsonObject.getString("database");
                     String type = jsonObject.getString("type");
@@ -145,8 +145,8 @@ public class DimApp extends BaseApp {
                                
                                @Override
                                public void flatMap(String value, Collector<TableProcessDim> out) throws Exception {
-                                   boolean isJsonObj = JSON.isValidObject(value);
-                                   if (isJsonObj) {
+                                   boolean isJsonObject = JSON.isValidObject(value);
+                                   if (isJsonObject) {
                                        JSONObject jsonObject = JSON.parseObject(value);
                                        String op = jsonObject.getString("op");
                                        TableProcessDim tableProcessDim = new TableProcessDim();

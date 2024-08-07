@@ -18,6 +18,7 @@ public class TrafficPageView {
     // 当天日期
     @JSONField(name = "cur_date")
     private String curDate;
+    
     // app版本号
     private String vc;
     // 渠道

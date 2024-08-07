@@ -47,8 +47,8 @@ public class DwdBaseDbApp extends BaseApp {
                 mySqlSource.flatMap(new RichFlatMapFunction<String, TableProcessDwd>() {
                                @Override
                                public void flatMap(String value, Collector<TableProcessDwd> out) throws Exception {
-                                   boolean isJsonObj = JSON.isValidObject(value);
-                                   if (isJsonObj) {
+                                   boolean isJsonObject = JSON.isValidObject(value);
+                                   if (isJsonObject) {
                                        JSONObject jsonObject = JSON.parseObject(value);
                                        String op = jsonObject.getString("op");
                                        TableProcessDwd tableProcessDwd = new TableProcessDwd();
@@ -100,8 +100,8 @@ public class DwdBaseDbApp extends BaseApp {
         SingleOutputStreamOperator<JSONObject> jsonObjectStream = source.flatMap(new FlatMapFunction<String, JSONObject>() {
             @Override
             public void flatMap(String value, Collector<JSONObject> out) throws Exception {
-                boolean isJsonObj = JSON.isValidObject(value);
-                if (isJsonObj) {
+                boolean isJsonObject = JSON.isValidObject(value);
+                if (isJsonObject) {
                     JSONObject jsonObject = JSON.parseObject(value);
                     out.collect(jsonObject);
                 }

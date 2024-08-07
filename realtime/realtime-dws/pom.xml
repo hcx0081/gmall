@@ -12,7 +12,7 @@
     <artifactId>realtime-dws</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>realtime-dws-user-login</module>
+        <module>realtime-dws-user-login-window</module>
         <module>realtime-dws-traffic-source-keyword-page-view-window</module>
         <module>realtime-dws-traffic-vc-ch-ar-is_new-page-view-window</module>
         <module>realtime-dws-traffic-home-detail-page-view-window</module>
