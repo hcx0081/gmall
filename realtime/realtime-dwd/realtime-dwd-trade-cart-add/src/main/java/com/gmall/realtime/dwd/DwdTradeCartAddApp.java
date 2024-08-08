@@ -29,20 +29,20 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
     private Table selectCartInfo(StreamTableEnvironment tEnv) {
         return tEnv.sqlQuery(
                 "select " +
-                        "       data['id']                                                                                                          id,\n" +
-                        "       data['user_id']                                                                                                     user_id,\n" +
-                        "       data['sku_id']                                                                                                      sku_id,\n" +
-                        "       data['cart_price']                                                                                                  cart_price,\n" +
-                        "       if(`type` = 'insert', cast(`data`['sku_num'] as bigint), cast(`data`['sku_num'] as bigint) - cast(`old`['sku_num'] as bigint))        sku_num,\n" +
-                        "       data['img_url']                                                                                                     img_url,\n" +
-                        "       data['sku_name']                                                                                                    sku_name,\n" +
-                        "       data['is_checked']                                                                                                  is_checked,\n" +
-                        "       data['create_time']                                                                                                 create_time,\n" +
-                        "       data['operate_time']                                                                                                operate_time,\n" +
-                        "       data['is_ordered']                                                                                                  is_ordered,\n" +
-                        "       data['order_time']                                                                                                  order_time,\n" +
-                        "       ts,\n" +
-                        "       proc_time\n" +
+                        "       data['id']                                                                                                                          id,\n" +
+                        "       data['user_id']                                                                                                                     user_id,\n" +
+                        "       data['sku_id']                                                                                                                      sku_id,\n" +
+                        "       data['cart_price']                                                                                                                  cart_price,\n" +
+                        "       if(`type` = 'insert', cast(`data`['sku_num'] as bigint), cast(`data`['sku_num'] as bigint) - cast(`old`['sku_num'] as bigint))      sku_num,\n" +
+                        "       data['img_url']                                                                                                                     img_url,\n" +
+                        "       data['sku_name']                                                                                                                    sku_name,\n" +
+                        "       data['is_checked']                                                                                                                  is_checked,\n" +
+                        "       data['create_time']                                                                                                                 create_time,\n" +
+                        "       data['operate_time']                                                                                                                operate_time,\n" +
+                        "       data['is_ordered']                                                                                                                  is_ordered,\n" +
+                        "       data['order_time']                                                                                                                  order_time,\n" +
+                        "       ts\n" +
+                        // "       proc_time\n" +
                         "from topic_db_source\n" +
                         "where `database` = 'gmall'\n" +
                         "  and `table` = 'cart_info'\n" +
@@ -58,7 +58,7 @@ public class DwdTradeCartAddApp extends BaseSQLApp {
                 "    `user_id`          STRING,\n" +
                 "    `sku_id`           STRING,\n" +
                 "    `cart_price`       STRING,\n" +
-                "    `sku_num`          STRING,\n" +
+                "    `sku_num`          BIGINT,\n" +
                 "    `img_url`          STRING,\n" +
                 "    `sku_name`         STRING,\n" +
                 "    `is_checked`       STRING,\n" +

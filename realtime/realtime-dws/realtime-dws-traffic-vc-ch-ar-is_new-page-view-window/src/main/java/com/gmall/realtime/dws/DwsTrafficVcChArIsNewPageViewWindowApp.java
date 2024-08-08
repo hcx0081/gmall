@@ -67,7 +67,7 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
         
         // 构建TrafficPageView对象
         SingleOutputStreamOperator<TrafficPageView> beanStream = keyedByMidStream.process(new KeyedProcessFunction<String, JSONObject, TrafficPageView>() {
-            ValueState<String> lastLoginDtValueState;
+            ValueState<String> lastLoginDtState;
             
             @Override
             public void open(Configuration parameters) throws Exception {
@@ -77,7 +77,7 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
                                       .updateTtlOnCreateAndWrite()
                                       .build()
                 );
-                lastLoginDtValueState = getRuntimeContext().getState(valueStateDescriptor);
+                lastLoginDtState = getRuntimeContext().getState(valueStateDescriptor);
             }
             
             @Override
@@ -94,11 +94,11 @@ public class DwsTrafficVcChArIsNewPageViewWindowApp extends BaseApp {
                 
                 Long ts = value.getLong("ts");
                 String curDate = DateFormatUtils.tsToDateString(ts);
-                String lastLoginDt = lastLoginDtValueState.value();
+                String lastLoginDt = lastLoginDtState.value();
                 Long uvCt = 0L;
                 if (lastLoginDt == null || !lastLoginDt.equals(curDate)) {
                     uvCt = 1L;
-                    lastLoginDtValueState.update(curDate);
+                    lastLoginDtState.update(curDate);
                 }
                 
                 JSONObject page = value.getJSONObject("page");
