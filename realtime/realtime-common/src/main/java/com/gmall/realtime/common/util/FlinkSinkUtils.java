@@ -26,10 +26,11 @@ public class FlinkSinkUtils {
         properties.put("transaction.timeout.ms", 1000 * 60 * 15);
         KafkaSink<String> kafkaSink = KafkaSink.<String>builder()
                                                .setBootstrapServers(Constants.KAFKA_BOOTSTRAP_SERVERS)
-                                               .setRecordSerializer(new KafkaRecordSerializationSchemaBuilder<String>()
-                                                       .setTopic(topic)
-                                                       .setValueSerializationSchema(new SimpleStringSchema())
-                                                       .build())
+                                               .setRecordSerializer(
+                                                       new KafkaRecordSerializationSchemaBuilder<String>().setTopic(topic)
+                                                                                                          .setValueSerializationSchema(new SimpleStringSchema())
+                                                                                                          .build()
+                                               )
                                                .setDeliverGuarantee(DeliveryGuarantee.EXACTLY_ONCE)
                                                .setTransactionalIdPrefix("gmall" + "-" + topic + "-" + System.currentTimeMillis())
                                                .setKafkaProducerConfig(properties)

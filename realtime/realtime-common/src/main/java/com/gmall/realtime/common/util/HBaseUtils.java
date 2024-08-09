@@ -274,6 +274,36 @@ public class HBaseUtils {
     }
     
     /**
+     * 读取单元格
+     *
+     * @param connection   HBase连接
+     * @param namespace    命名空间
+     * @param table        表格
+     * @param rowKey       RowKey
+     * @param columnFamily 列族
+     * @return JSON对象
+     */
+    public static JSONObject get(Connection connection, String namespace, String table, String rowKey, String columnFamily) {
+        if (!isTableExist(connection, namespace, table)) {
+            throw new RuntimeException("表格不存在！");
+        }
+        try (Table t = connection.getTable(TableName.valueOf(namespace, table))) {
+            Get get = new Get(rowKey.getBytes(StandardCharsets.UTF_8));
+            get.addFamily(columnFamily.getBytes(StandardCharsets.UTF_8))
+               .readAllVersions();
+            Result result = t.get(get);
+            List<Cell> cellList = result.listCells();
+            JSONObject jsonObject = new JSONObject();
+            for (Cell cell : cellList) {
+                jsonObject.put(new String(CellUtil.cloneQualifier(cell)), new String(CellUtil.cloneValue(cell)));
+            }
+            return jsonObject;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+    
+    /**
      * 删除单元格
      *
      * @param connection      HBase连接

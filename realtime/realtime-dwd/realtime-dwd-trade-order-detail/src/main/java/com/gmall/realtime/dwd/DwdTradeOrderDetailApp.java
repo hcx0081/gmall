@@ -45,6 +45,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       sku_id,\n" +
                         "       sku_name,\n" +
                         "       order_price,\n" +
+                        "       sku_num,\n" +
                         "       create_time,\n" +
                         "       split_total_amount,\n" +
                         "       split_activity_amount,\n" +
@@ -63,7 +64,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
         
         createTopicDwdTradeOrderDetailSinkToKafka(tEnv);
         
-        joinTable.insertInto(Constants.TOPIC_DWD_TRADE_ORDER_DETAIL).execute();
+        joinTable.insertInto("topic_dwd_trade_order_detail_sink").execute();
     }
     
     
@@ -75,6 +76,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                         "       data['sku_id']                  sku_id,\n" +
                         "       data['sku_name']                sku_name,\n" +
                         "       data['order_price']             order_price,\n" +
+                        "       data['sku_num']                 sku_num,\n" +
                         "       data['create_time']             create_time,\n" +
                         "       data['split_total_amount']      split_total_amount,\n" +
                         "       data['split_activity_amount']   split_activity_amount,\n" +
@@ -136,6 +138,7 @@ public class DwdTradeOrderDetailApp extends BaseSQLApp {
                 "    sku_id                string,\n" +
                 "    sku_name              string,\n" +
                 "    order_price           string,\n" +
+                "    sku_num               string,\n" +
                 "    create_time           string,\n" +
                 "    split_total_amount    string,\n" +
                 "    split_activity_amount string,\n" +

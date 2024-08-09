@@ -20,6 +20,13 @@ public interface Constants {
     
     String HBASE_ZOOKEEPER_QUORUM = "192.168.100.100";
     String HBASE_NAMESPACE = "gmall";
+    String HBASE_TABLE_DIM_SKU_INFO = "dim_sku_info";
+    String HBASE_TABLE_DIM_SPU_INFO = "dim_spu_info";
+    String HBASE_TABLE_DIM_BASE_CATEGORY1 = "dim_base_category1";
+    String HBASE_TABLE_DIM_BASE_CATEGORY2 = "dim_base_category2";
+    String HBASE_TABLE_DIM_BASE_CATEGORY3 = "dim_base_category3";
+    String HBASE_TABLE_DIM_BASE_TRADEMARK = "dim_base_trademark";
+    String HBASE_COLUMNFAMILY = "info";
     
     String DORIS_FE_NODES = "192.168.100.100:8030";
     String DORIS_USERNAME = "root";
@@ -31,6 +38,7 @@ public interface Constants {
     String DORIS_TABLE_DWS_USER_USER_LOGIN_WINDOW = "dws_user_user_login_window";
     String DORIS_TABLE_DWS_USER_USER_REGISTER_WINDOW = "dws_user_user_register_window";
     String DORIS_TABLE_DWS_TRADE_CART_ADD_UU_WINDOW = "dws_trade_cart_add_uu_window";
+    String DORIS_TABLE_DWS_TRADE_SKU_ORDER_WINDOW = "dws_trade_sku_order_window";
     
     /* 主题 */
     String TOPIC_DB = "topic_db";
