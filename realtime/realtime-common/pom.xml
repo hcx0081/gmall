@@ -51,6 +51,11 @@
             <groupId>org.apache.doris</groupId>
             <artifactId>flink-doris-connector-1.16</artifactId>
         </dependency>
+        
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

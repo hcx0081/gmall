@@ -13,7 +13,6 @@
         <module>realtime-dim</module>
         <module>realtime-dwd</module>
         <module>realtime-dws</module>
-        <module>realtime-dws/realtime-dws-trade-cart-add-uu-window</module>
     </modules>
     
     <properties>
@@ -31,6 +30,7 @@
         <fastjson2.version>2.0.50</fastjson2.version>
         <hutool.version>5.8.20</hutool.version>
         <hutool.version>5.8.20</hutool.version>
+        <jedis.version>5.0.0</jedis.version>
     </properties>
     
     <dependencies>
@@ -177,8 +177,13 @@
                 <artifactId>flink-doris-connector-1.16</artifactId>
                 <version>${flink-doris.vesion}</version>
             </dependency>
+            
+            <dependency>
+                <groupId>redis.clients</groupId>
+                <artifactId>jedis</artifactId>
+                <version>${jedis.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
-
 
 </project>
