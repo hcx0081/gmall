@@ -46,7 +46,7 @@ import java.time.Duration;
 @Slf4j
 public class DwsTradeSkuOrderWindowSyncCacheApp extends BaseApp {
     public static void main(String[] args) throws Exception {
-        new DwsTradeSkuOrderWindowSyncCacheApp().start(10029, 4, "dws-trade-sku-order-window-app", Constants.TOPIC_DWD_TRADE_ORDER_DETAIL);
+        new DwsTradeSkuOrderWindowSyncCacheApp().start(10029, 4, "dws-trade-sku-order-window-sync-cache-app", Constants.TOPIC_DWD_TRADE_ORDER_DETAIL);
     }
     
     @Override
