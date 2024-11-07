@@ -31,4 +31,5 @@ select user_id,
        sum(sku_num),
        sum(split_payment_amount)
 from dwd_trade_pay_detail_suc_inc
+where dt = '2024-05-06'
 group by user_id;
